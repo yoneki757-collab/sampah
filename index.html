@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoHero - Transparansi Penyaluran Dana & Reboisasi Karhutla</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --accent: #f59e0b;
+            --forest: #15803d;
+            --gold: #fbbf24;
+            --silver: #94a3b8;
+            --bronze: #d97706;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #d1fae5, #fef3c7, #f1f5f9);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+        }
+
+        header h1 span.eco { color: var(--primary); }
+        header h1 span.fire { color: #ef4444; }
+
+        header p {
+            color: var(--gray);
+            font-size: 1.15rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Banner Pohon Pelindung (Reboisasi) */
+        .tree-section {
+            background: linear-gradient(135deg, #14532d 0%, #15803d 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 30px -10px rgba(21, 128, 61, 0.35);
+            margin-bottom: 2.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media(max-width: 850px) {
+            .tree-section { grid-template-columns: 1fr; text-align: center; }
+        }
+
+        .tree-badge {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .tree-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #86efac;
+            flex-shrink: 0;
+        }
+
+        .tree-info h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a7f3d0;
+        }
+
+        .tree-info .tree-count {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 0.2rem;
+        }
+
+        .progress-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            padding: 1.25rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            color: #e2e8f0;
+        }
+
+        .progress-bar-bg {
+            background: rgba(0, 0, 0, 0.25);
+            height: 14px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #86efac, #fde047);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+        }
+
+        .stat-icon.trash { background: #d1fae5; color: var(--primary); }
+        .stat-icon.funds { background: #fef3c7; color: var(--accent); }
+        .stat-icon.donors { background: #e0e7ff; color: #4f46e5; }
+
+        .stat-info h3 {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-info .value {
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        /* Grid Layout */
+        .grid-two {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media(max-width: 992px) {
+            .grid-two { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header i {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .card-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--dark);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+        }
+
+        .conversion-box {
+            background: linear-gradient(135deg, #ecfdf5, #fef3c7);
+            border: 1px dashed var(--primary);
+            padding: 1rem;
+            border-radius: 14px;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
+        .conversion-box span {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .conversion-box .converted-val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-top: 0.2rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Leaderboard Podium Styling */
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-top: 1rem;
+        }
+
+        .podium-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .podium-card {
+            background: #fff;
+            padding: 1rem 0.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .podium-1 { order: 2; height: 160px; background: linear-gradient(to bottom, #fff, #fef3c7); border: 2px solid var(--gold); }
+        .podium-2 { order: 1; height: 135px; background: linear-gradient(to bottom, #fff, #f1f5f9); border: 2px solid var(--silver); }
+        .podium-3 { order: 3; height: 120px; background: linear-gradient(to bottom, #fff, #fff7ed); border: 2px solid var(--bronze); }
+
+        .crown {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .podium-1 .crown { color: var(--gold); }
+        .podium-2 .crown { color: var(--silver); }
+        .podium-3 .crown { color: var(--bronze); }
+
+        .podium-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .podium-score {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-top: 0.3rem;
+        }
+
+        /* Leaderboard List */
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 0.85rem 1.2rem;
+            border-radius: 14px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .lb-rank {
+            font-weight: 800;
+            width: 30px;
+            color: var(--gray);
+        }
+
+        .lb-info {
+            flex-grow: 1;
+            margin-left: 0.5rem;
+        }
+
+        .lb-info .name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .lb-val {
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        /* Penyaluran Dana Section */
+        .transparency-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .transparency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .transparency-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .transparency-card .date {
+            font-size: 0.78rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .transparency-card .title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0.4rem 0;
+            color: var(--dark);
+        }
+
+        .transparency-card .amount {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .transparency-card .desc {
+            font-size: 0.88rem;
+            color: var(--gray);
+            line-height: 1.4;
+        }
+
+        .transparency-card .badge-status {
+            display: inline-block;
+            padding: 0.3rem 0.75rem;
+            background: #d1fae5;
+            color: var(--primary-dark);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 0.8rem;
+        }
+
+        /* Admin Controls */
+        .admin-toggle-btn {
+            background: #e2e8f0;
+            color: var(--dark);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-toggle-btn:hover { background: #cbd5e1; }
+
+        .admin-panel {
+            display: none;
+            background: #fff;
+            border: 2px dashed var(--accent);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-top: 1.5rem;
+        }
+
+        .admin-panel.active { display: block; }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .btn-reset-all {
+            width: 100%;
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background 0.2s ease;
+        }
+
+        .btn-reset-all:hover { background: #b91c1c; }
+
+        .empty-state {
+            text-align: center;
+            color: var(--gray);
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1><span class="eco">Eco</span>Hero <span class="fire">Karhutla</span></h1>
+            <p>Konversi Sampah Menjadi Dana Penyaluran & Pohon Pelindung Reboisasi Hutan Karhutla!</p>
+        </header>
+
+        <!-- Banner Fitur Pohon Pelindung (Reboisasi) -->
+        <div class="tree-section">
+            <div class="tree-badge">
+                <div class="tree-icon">
+                    <i class="fa-solid fa-tree"></i>
+                </div>
+                <div class="tree-info">
+                    <h3>Pohon Pelindung Terdana</h3>
+                    <div class="tree-count" id="treeCount">0 Pohon</div>
+                </div>
+            </div>
+            <div class="progress-box">
+                <div class="progress-header">
+                    <span>Target Pohon Berikutnya</span>
+                    <span id="progressText">0 / 10 Kg</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Counter Statistik Utama -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon trash"><i class="fa-solid fa-dumpster"></i></div>
+                <div class="stat-info">
+                    <h3>Total Sampah Terkumpul</h3>
+                    <div class="value" id="totalSampah">0 Kg</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon funds"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <div class="stat-info">
+                    <h3>Total Dana Terkumpul</h3>
+                    <div class="value" id="totalDana">Rp 0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon donors"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-info">
+                    <h3>Total Mahasiswa Menyumbang</h3>
+                    <div class="value" id="totalDonatur">0 Orang</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Layout Utama: Form & Leaderboard -->
+        <div class="grid-two">
+            
+            <!-- Form Input Setor Sampah -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-recycle"></i>
+                    <h2>Form Setoran Sampah</h2>
+                </div>
+
+                <!-- PENTING: Ganti email-kamu@gmail.com dengan alamat email kamu! -->
+                <form id="wasteForm" action="https://formsubmit.co/email-kamu@gmail.com" method="POST">
+                    <input type="hidden" name="_subject" value="Setoran Sampah Baru - EcoHero Karhutla">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="false">
+
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="nama" name="Nama" required placeholder="Contoh: Budi Santoso">
+                    </div>
+                    <div class="form-group">
+                        <label>NIM / Kelas</label>
+                        <input type="text" id="nim" name="NIM_Kelas" required placeholder="Contoh: 2110512001 / 3B">
+                    </div>
+                    <div class="form-group">
+                        <label>Fakultas</label>
+                        <input type="text" id="fakultas" name="Fakultas" required placeholder="Contoh: Fakultas Teknik">
+                    </div>
+                    <div class="form-group">
+                        <label>Program Studi (Prodi)</label>
+                        <input type="text" id="prodi" name="Prodi" required placeholder="Contoh: Teknik Informatika">
+                    </div>
+
+                    <!-- PENAMBAHAN PILIHAN JENIS SAMPAH -->
+                    <div class="form-group">
+                        <label>Jenis Sampah</label>
+                        <select id="jenisSampah" name="Jenis_Sampah" required onchange="hitungKonversi()">
+                            <option value="Botol Plastik">Botol Plastik (Rp 4.000 / Kg)</option>
+                            <option value="Kaleng">Kaleng Aluminium (Rp 7.000 / Kg)</option>
+                            <option value="Karton/Kardus">Karton / Kardus (Rp 3.000 / Kg)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Jumlah Sampah (Kg)</label>
+                        <input type="number" step="0.1" id="berat" name="Jumlah_Sampah_Kg" required placeholder="Masukkan berat, misal: 3.5" oninput="hitungKonversi()">
+                    </div>
+
+                    <!-- Otomatis Konversi Nilai Rupiah -->
+                    <div class="conversion-box">
+                        <span>Otomatis Terkonversi Menjadi Donasi:</span>
+                        <div class="converted-val" id="konversiHarga">Rp 0</div>
+                        <input type="hidden" id="hargaHidden" name="Nilai_Donasi_Rp">
+                    </div>
+
+                    <button type="submit" class="btn-submit" onclick="prosesSetoran(event)">
+                        <i class="fa-solid fa-paper-plane"></i> Kirim Setoran & Donasi
+                    </button>
+                </form>
+            </div>
+
+            <!-- Leaderboard Antar Prodi -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-trophy" style="color: var(--accent);"></i>
+                    <h2>Leaderboard Antar Prodi</h2>
+                </div>
+
+                <!-- Podium Top 3 Prodi -->
+                <div class="podium">
+                    <div class="podium-item">
+                        <div class="podium-card podium-2">
+                            <div class="crown"><i class="fa-solid fa-medal"></i></div>
+                            <div class="podium-name" id="p2-name">-</div>
+                            <div class="podium-score" id="p2-score">0 Kg</div>
+                        </div>
+                    </div>
+                    <div class="podium-item">
+                        <div class="podium-card podium-1">
+                            <div class="crown"><i class="fa-solid fa-crown"></i></div>
+                            <div class="podium-name" id="p1-name">-</div>
+                            <div class="podium-score" id="p1-score">0 Kg</div>
+                        </div>
+                    </div>
+                    <div class="podium-item">
+                        <div class="podium-card podium-3">
+                            <div class="crown"><i class="fa-solid fa-award"></i></div>
+                            <div class="podium-name" id="p3-name">-</div>
+                            <div class="podium-score" id="p3-score">0 Kg</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- List Peringkat Prodi Selanjutnya -->
+                <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--gray);">Peringkat Prodi Lainnya:</h3>
+                <div class="leaderboard-list" id="leaderboardList"></div>
+            </div>
+
+        </div>
+
+        <!-- Seksi Transparansi Laporan Penyaluran Dana -->
+        <div class="card transparency-section">
+            <div class="card-header">
+                <i class="fa-solid fa-file-invoice-dollar" style="color: var(--primary);"></i>
+                <h2>Laporan Penyaluran Dana Kemanusiaan</h2>
+            </div>
+
+            <p style="color: var(--gray); font-size: 0.95rem; margin-bottom: 1.5rem;">
+                Rincian transparansi penggunaan dana hasil konversi sampah yang disalurkan untuk bantuan Karhutla dan program Reboisasi:
+            </p>
+
+            <!-- Cards Grid Penyaluran Dana -->
+            <div class="transparency-grid" id="transparencyGrid"></div>
+
+            <!-- Panel Admin Control -->
+            <button class="admin-toggle-btn" onclick="toggleAdminPanel()">
+                <i class="fa-solid fa-gear"></i> 🔐 Panel Admin & Kelola Data
+            </button>
+
+            <div class="admin-panel" id="adminPanel">
+                <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--dark);">Tambah Laporan Penyaluran Dana Baru</h3>
+                <div class="form-group">
+                    <label>Tanggal Penyaluran</label>
+                    <input type="text" id="admTanggal" placeholder="Contoh: 15 Oktober 2026">
+                </div>
+                <div class="form-group">
+                    <label>Nama Alokasi / Pengeluaran</label>
+                    <input type="text" id="admJudul" placeholder="Contoh: Pembelian Masker N95 untuk Warga">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Dana Disalurkan (Rp)</label>
+                    <input type="number" id="admNominal" placeholder="Contoh: 500000">
+                </div>
+                <div class="form-group">
+                    <label>Keterangan Rincian</label>
+                    <input type="text" id="admKet" placeholder="Contoh: Bantuan 200 box masker respirator N95 untuk warga">
+                </div>
+                <button type="button" class="btn-submit" style="background: var(--dark);" onclick="tambahPenyaluran()">
+                    <i class="fa-solid fa-plus"></i> Simpan Laporan Penyaluran
+                </button>
+
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px dashed #cbd5e1;">
+
+                <!-- Tombol Reset Semua Data Web -->
+                <button type="button" class="btn-reset-all" onclick="resetSemuaData()">
+                    <i class="fa-solid fa-rotate-right"></i> RESET / KOSONGKAN SEMUA DATA WEB
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // TARIF HARGA PER KG SESUAI JENIS SAMPAH
+        const TARIF_SAMPAH = {
+            "Botol Plastik": 4000,
+            "Kaleng": 7000,
+            "Karton/Kardus": 3000
+        };
+        
+        // POHON PELINDUNG: Setiap 10 Kg Sampah = 1 Pohon Terdana
+        const KG_PER_TREE = 10;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initDefaultPenyaluranData();
+            renderUI();
+        });
+
+        // Hitung Otomatis Konversi Nilai Rupiah Berdasarkan Jenis Sampah & Berat
+        function hitungKonversi() {
+            const jenis = document.getElementById('jenisSampah').value;
+            const berat = parseFloat(document.getElementById('berat').value) || 0;
+            const tarif = TARIF_SAMPAH[jenis] || 4000;
+            const totalHarga = berat * tarif;
+            
+            document.getElementById('konversiHarga').innerText = "Rp " + totalHarga.toLocaleString('id-ID');
+            document.getElementById('hargaHidden').value = totalHarga;
+        }
+
+        // Simpan Setoran Baru
+        function prosesSetoran(event) {
+            const nama = document.getElementById('nama').value;
+            const nim = document.getElementById('nim').value;
+            const fakultas = document.getElementById('fakultas').value;
+            const prodi = document.getElementById('prodi').value;
+            const jenis = document.getElementById('jenisSampah').value;
+            const berat = parseFloat(document.getElementById('berat').value) || 0;
+            const tarif = TARIF_SAMPAH[jenis] || 4000;
+            const harga = berat * tarif;
+
+            if (!nama || !nim || !prodi || berat <= 0) return;
+
+            let records = JSON.parse(localStorage.getItem('ecohero_records')) || [];
+
+            records.push({
+                nama: nama,
+                nim: nim,
+                fakultas: fakultas,
+                prodi: prodi.trim(),
+                jenis: jenis,
+                berat: berat,
+                harga: harga
+            });
+
+            localStorage.setItem('ecohero_records', JSON.stringify(records));
+            document.getElementById('wasteForm').submit();
+        }
+
+        // Inisialisasi Data Penyaluran Bawaan
+        function initDefaultPenyaluranData() {
+            let data = localStorage.getItem('ecohero_penyaluran');
+            if (!data) {
+                const defaultPenyaluran = [
+                    {
+                        id: 1,
+                        tanggal: "12 Oktober 2026",
+                        judul: "Pengadaan Masker N95 & Suplemen",
+                        nominal: 750000,
+                        keterangan: "Penyaluran bantuan masker filter respirator N95 dan obat ISPA untuk masyarakat terdampak asap Karhutla.",
+                        status: "Disalurkan"
+                    },
+                    {
+                        id: 2,
+                        tanggal: "14 Oktober 2026",
+                        judul: "Bibit Pohon Pelindung Reboisasi",
+                        nominal: 500000,
+                        keterangan: "Pembelian 10 bibit pohon mahoni & trembesi untuk reboisasi zona hijau hutan Karhutla.",
+                        status: "Disalurkan"
+                    }
+                ];
+                localStorage.setItem('ecohero_penyaluran', JSON.stringify(defaultPenyaluran));
+            }
+        }
+
+        // Toggle Admin Panel
+        function toggleAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('active');
+        }
+
+        // Tambah Item Penyaluran Dana
+        function tambahPenyaluran() {
+            const tanggal = document.getElementById('admTanggal').value;
+            const judul = document.getElementById('admJudul').value;
+            const nominal = parseFloat(document.getElementById('admNominal').value) || 0;
+            const keterangan = document.getElementById('admKet').value;
+
+            if (!tanggal || !judul || nominal <= 0) {
+                alert("Harap isi semua kolom penyaluran dana dengan benar!");
+                return;
+            }
+
+            let penyaluranList = JSON.parse(localStorage.getItem('ecohero_penyaluran')) || [];
+            
+            penyaluranList.unshift({
+                id: Date.now(),
+                tanggal: tanggal,
+                judul: judul,
+                nominal: nominal,
+                keterangan: keterangan,
+                status: "Disalurkan"
+            });
+
+            localStorage.setItem('ecohero_penyaluran', JSON.stringify(penyaluranList));
+
+            document.getElementById('admTanggal').value = '';
+            document.getElementById('admJudul').value = '';
+            document.getElementById('admNominal').value = '';
+            document.getElementById('admKet').value = '';
+
+            renderUI();
+            alert("Laporan Penyaluran Dana Berhasil Ditambahkan!");
+        }
+
+        // Hapus Single Item Penyaluran
+        function hapusPenyaluran(id) {
+            if (confirm("Apakah kamu yakin ingin menghapus laporan penyaluran ini?")) {
+                let penyaluranList = JSON.parse(localStorage.getItem('ecohero_penyaluran')) || [];
+                penyaluranList = penyaluranList.filter(item => item.id !== id);
+                localStorage.setItem('ecohero_penyaluran', JSON.stringify(penyaluranList));
+                renderUI();
+            }
+        }
+
+        // FUNGSI RESET SEMUA DATA WEB
+        function resetSemuaData() {
+            if (confirm("⚠️ PERINGATAN: Apakah kamu yakin ingin MENGHAPUS SEMUA DATA setoran, leaderboard, dan penyaluran dana?\n\nData yang dihapus tidak bisa dikembalikan!")) {
+                localStorage.removeItem('ecohero_records');
+                localStorage.removeItem('ecohero_penyaluran');
+                alert("Semua data berhasil di-reset menjadi kosong!");
+                location.reload();
+            }
+        }
+
+        // Render Tampilan UI
+        function renderUI() {
+            let records = JSON.parse(localStorage.getItem('ecohero_records')) || [];
+
+            let totalBeratGlobal = 0;
+            let totalDanaGlobal = 0;
+            let prodiMap = {};
+
+            records.forEach(r => {
+                totalBeratGlobal += r.berat;
+                totalDanaGlobal += r.harga;
+
+                let prodiKey = r.prodi.toUpperCase();
+
+                if (!prodiMap[prodiKey]) {
+                    prodiMap[prodiKey] = {
+                        namaProdi: r.prodi,
+                        totalBerat: 0,
+                        totalDana: 0,
+                        jumlahKontributor: 0
+                    };
+                }
+                prodiMap[prodiKey].totalBerat += r.berat;
+                prodiMap[prodiKey].totalDana += r.harga;
+                prodiMap[prodiKey].jumlahKontributor += 1;
+            });
+
+            // Hitung Pohon Pelindung & Progress Bar
+            const totalPohon = Math.floor(totalBeratGlobal / KG_PER_TREE);
+            const sisaKgProgress = totalBeratGlobal % KG_PER_TREE;
+            const progressPercent = (sisaKgProgress / KG_PER_TREE) * 100;
+
+            document.getElementById('treeCount').innerText = totalPohon + " Pohon";
+            document.getElementById('progressText').innerText = sisaKgProgress.toFixed(1) + " / " + KG_PER_TREE + " Kg";
+            document.getElementById('progressBar').style.width = progressPercent + "%";
+
+            // Update Header Stats
+            document.getElementById('totalSampah').innerText = totalBeratGlobal.toFixed(1) + " Kg";
+            document.getElementById('totalDana').innerText = "Rp " + totalDanaGlobal.toLocaleString('id-ID');
+            document.getElementById('totalDonatur').innerText = records.length + " Orang";
+
+            // Leaderboard Prodi
+            let leaderboardProdi = Object.values(prodiMap);
+            leaderboardProdi.sort((a, b) => b.totalBerat - a.totalBerat);
+
+            // Update Podium
+            if (leaderboardProdi[0]) {
+                document.getElementById('p1-name').innerText = leaderboardProdi[0].namaProdi;
+                document.getElementById('p1-score').innerText = leaderboardProdi[0].totalBerat.toFixed(1) + " Kg";
+            } else {
+                document.getElementById('p1-name').innerText = "-";
+                document.getElementById('p1-score').innerText = "0 Kg";
+            }
+
+            if (leaderboardProdi[1]) {
+                document.getElementById('p2-name').innerText = leaderboardProdi[1].namaProdi;
+                document.getElementById('p2-score').innerText = leaderboardProdi[1].totalBerat.toFixed(1) + " Kg";
+            } else {
+                document.getElementById('p2-name').innerText = "-";
+                document.getElementById('p2-score').innerText = "0 Kg";
+            }
+
+            if (leaderboardProdi[2]) {
+                document.getElementById('p3-name').innerText = leaderboardProdi[2].namaProdi;
+                document.getElementById('p3-score').innerText = leaderboardProdi[2].totalBerat.toFixed(1) + " Kg";
+            } else {
+                document.getElementById('p3-name').innerText = "-";
+                document.getElementById('p3-score').innerText = "0 Kg";
+            }
+
+            // Update List Peringkat
+            const lbList = document.getElementById('leaderboardList');
+            lbList.innerHTML = "";
+
+            if (leaderboardProdi.length === 0) {
+                lbList.innerHTML = `<div class="empty-state"><i class="fa-solid fa-trophy" style="font-size:2rem; margin-bottom:0.5rem;"></i><br>Belum ada data setoran dari prodi mana pun.</div>`;
+            } else {
+                leaderboardProdi.forEach((item, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'lb-item';
+                    row.innerHTML = `
+                        <div class="lb-rank">#${index + 1}</div>
+                        <div class="lb-info">
+                            <div class="name">${item.namaProdi}</div>
+                            <div style="font-size: 0.78rem; color: var(--gray);">${item.jumlahKontributor} Mahasiswa menyetor</div>
+                        </div>
+                        <div class="lb-val">${item.totalBerat.toFixed(1)} Kg</div>
+                    `;
+                    lbList.appendChild(row);
+                });
+            }
+
+            // Render Kartu Penyaluran Dana Transparansi
+            const penGrid = document.getElementById('transparencyGrid');
+            let penyaluranList = JSON.parse(localStorage.getItem('ecohero_penyaluran')) || [];
+            
+            penGrid.innerHTML = "";
+
+            if (penyaluranList.length === 0) {
+                penGrid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><i class="fa-solid fa-receipt" style="font-size:2rem; margin-bottom:0.5rem;"></i><br>Belum ada laporan penyaluran dana.</div>`;
+            } else {
+                penyaluranList.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'transparency-card';
+                    card.innerHTML = `
+                        <div class="date"><i class="fa-regular fa-calendar-days"></i> ${p.tanggal}</div>
+                        <div class="title">${p.judul}</div>
+                        <div class="amount">Rp ${p.nominal.toLocaleString('id-ID')}</div>
+                        <div class="desc">${p.keterangan}</div>
+                        <div class="badge-status"><i class="fa-solid fa-circle-check"></i> ${p.status}</div>
+                        <br>
+                        <button class="btn-delete" onclick="hapusPenyaluran(${p.id})"><i class="fa-solid fa-trash"></i> Hapus Laporan</button>
+                    `;
+                    penGrid.appendChild(card);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
